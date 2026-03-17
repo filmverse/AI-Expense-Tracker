@@ -20,7 +20,8 @@ export function initDatabase(): void {
       merchant TEXT,
       original_input TEXT NOT NULL,
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
-    )
+    );
+    CREATE INDEX IF NOT EXISTS idx_expenses_created_at ON expenses(created_at DESC);
   `);
 }
 

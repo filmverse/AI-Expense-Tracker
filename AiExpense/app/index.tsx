@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -18,29 +18,37 @@ export default function ExpenseTrackerScreen() {
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [lastAdded, setLastAdded] = useState<Expense | null>(null);
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const fetchExpenses = async () => {
     try {
       const data = await api.getExpenses();
       setExpenses(data);
-    } catch (error: any) {
-      Alert.alert('Error', error.message || 'Failed to fetch expenses');
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : 'Failed to fetch expenses';
+      Alert.alert('Error', msg);
     }
   };
 
   useEffect(() => {
     fetchExpenses();
+    return () => {
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+    };
   }, []);
 
   const handleAddExpense = async (text: string) => {
     setLoading(true);
     try {
       const expense = await api.addExpense(text);
+      setExpenses((prev) => [expense, ...prev]);
       setLastAdded(expense);
-      await fetchExpenses();
-      setTimeout(() => setLastAdded(null), 3000);
-    } catch (error: any) {
-      Alert.alert('Error', error.message || 'Failed to add expense');
+
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+      successTimerRef.current = setTimeout(() => setLastAdded(null), 3000);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : 'Failed to add expense';
+      Alert.alert('Error', msg);
     } finally {
       setLoading(false);
     }
@@ -49,9 +57,10 @@ export default function ExpenseTrackerScreen() {
   const handleDeleteExpense = async (id: number) => {
     try {
       await api.deleteExpense(id);
-      await fetchExpenses();
-    } catch (error: any) {
-      Alert.alert('Error', error.message || 'Failed to delete expense');
+      setExpenses((prev) => prev.filter((e) => e.id !== id));
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : 'Failed to delete expense';
+      Alert.alert('Error', msg);
     }
   };
 
