@@ -5,8 +5,8 @@ import {
   FlatList,
   Alert,
   StyleSheet,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Expense } from '@/types';
 import * as api from '@/services/api';
 import ExpenseInput from '@/components/ExpenseInput';
