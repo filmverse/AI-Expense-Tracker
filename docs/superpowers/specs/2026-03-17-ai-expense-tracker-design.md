@@ -7,7 +7,7 @@ A full-stack expense tracker where users add expenses in natural language and AI
 ## Tech Stack
 
 - **Backend:** Node.js, Express, TypeScript, better-sqlite3
-- **Mobile:** React Native, Expo (managed workflow), TypeScript
+- **Mobile:** React Native, Expo SDK 55 (managed workflow), TypeScript — uses React Compiler for auto-memoization
 - **AI:** Groq API (`llama-3.1-70b-versatile`)
 - **Project structure:** Monorepo — `backend/` and `mobile/` in one repo
 
