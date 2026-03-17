@@ -2,7 +2,7 @@
 
 ## Overview
 
-A full-stack expense tracker where users add expenses in natural language and AI automatically categorizes them. Built as a developer assessment for Grade Technologies.
+A full-stack expense tracker where users add expenses in natural language and AI automatically categorizes them.
 
 ## Tech Stack
 
@@ -164,7 +164,7 @@ User types text without amount
 - **No optimistic updates** — simple refetch after add/delete
 - **No caching** — useEffect on mount + pull-to-refresh
 - **No auth** — not required
-- **No unit tests** — manual testing via assessment checklist
+- **No unit tests** — manual testing via checklist
 - **No navigation** — single screen app
 - **No pagination** — all expenses returned at once
 

@@ -1262,7 +1262,7 @@ cd ~/Projects/ai-expense-tracker/mobile && npx expo start
 **Files:**
 - Create: `README.md`
 
-- [ ] **Step 1: Write README following assessment template**
+- [ ] **Step 1: Write README**
 
 Include: title, tech stack, setup instructions for backend and mobile, project structure, AI prompt design, time breakdown, future improvements, AI tools used.
 
