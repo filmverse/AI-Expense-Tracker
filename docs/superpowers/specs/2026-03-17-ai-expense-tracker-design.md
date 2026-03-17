@@ -48,15 +48,18 @@ Single `expenses` table in SQLite:
 | original_input | TEXT          | Raw user input text                      |
 | created_at     | TIMESTAMP     | Auto-set on insert                       |
 
+Note: SQLite uses type affinity; these types are for documentation. Validation is done at the application layer.
+
 ### AI Parser Service
 
 - Calls Groq API at `https://api.groq.com/openai/v1/chat/completions`
 - Model: `llama-3.1-70b-versatile`
-- Uses the system prompt from the assessment spec to parse natural language into structured JSON
-- Input: raw text string
+- Input: raw text string (reject inputs > 500 characters with 400)
 - Output: `{ amount, currency, category, description, merchant }`
 - Validates response schema, defaults to "INR" currency and "Other" category
 - Returns error object if amount cannot be extracted
+- If Groq returns non-JSON or malformed JSON, return 500 with "Failed to parse expense"
+- CORS middleware enabled on Express for mobile development
 
 ### API Endpoints
 
@@ -65,7 +68,7 @@ Single `expenses` table in SQLite:
 | GET    | /health            | Health check         | 200     | —     |
 | POST   | /api/expenses      | Add expense via AI   | 201     | 400   |
 | GET    | /api/expenses      | List all, newest first | 200   | 500   |
-| DELETE | /api/expenses/:id  | Delete by ID         | 200     | 404   |
+| DELETE | /api/expenses/:id  | Delete by ID         | 200     | 404, 500 |
 
 Response format: `{ success: boolean, expense/expenses/error/message: ... }`
 
